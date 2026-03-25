@@ -23,6 +23,7 @@ const subscriptionSchema = new mongoose.Schema(
     currency: {
       type: String,
       enum: ["USD", "EUR", "GBP", "INR", "JPY", "AUD", "CAD"],
+      default: "EUR",
     },
     frequency: {
       type: String,
@@ -50,17 +51,17 @@ const subscriptionSchema = new mongoose.Schema(
         validator: (value) => {
           value <= new Date();
         },
+        message: "Start date cannot be in the future",
       },
     },
     renewalDate: {
       type: Date,
-      required: true,
       validate: {
         validator: function (value) {
           return value > this.startDate;
         },
+        message: "Renewal date must be after the start date",
       },
-      message: "Renewal date must be after the start date",
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

@@ -15,18 +15,13 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      validate: [/\S+@\S+\.S+/, "Please provide a valid email address"],
+      match: [/\S+@\S+\.\S+/, "Please provide a valid email address"],
     },
     password: {
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters long"],
-    },
-    subscriptions: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Subscription",
-      default: [],
-    },
+    }
   },
   { timestamps: true },
 );

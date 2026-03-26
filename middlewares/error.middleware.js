@@ -9,20 +9,23 @@ export const errorMiddleware = (err, req, res, next) => {
 
     // Mongoose bad ObjectId
     if (err.name === "CastError") {
-      const message = `Resource not found with id of ${err.value}`;
-      error = new Error(message, 404);
+      const message = `Invalid value "${err.value}" for field "${err.path}"`;
+      error = new Error(message);
+      error.statusCode = 400;
     }
 
     // Mongoose duplicate key
     if (err.code === 11000) {
       const message = "Duplicate field value entered";
-      error = new Error(message, 400);
+      error = new Error(message);
+      error.statusCode = 400;
     }
 
     // Mongoose validation error
-    const message = Object.values(err.errors).map((val) => val.message);
     if (err.name === "ValidationError") {
-      error = new Error(message, 400);
+      const message = Object.values(err.errors).map((val) => val.message);
+      error = new Error(message);
+      error.statusCode = 400;
     }
 
     // Send error response
